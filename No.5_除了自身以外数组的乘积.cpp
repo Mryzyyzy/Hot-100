@@ -3,6 +3,14 @@
 
 using namespace std;
 
+/*
+    不能用除法，拆分乘积：除 nums [i] 之外的乘积 = i 左边所有数的乘积 × i 右边所有数乘积。
+    cpro[i]：前缀乘积，存从开头到 i 位置元素的乘积；
+    clro[i]：后缀乘积，存末尾向前的乘积；
+    ans[i]=左侧全部乘积×右侧全部乘积
+。
+*/
+
 vector<int> productExceptSelf(vector<int>& nums) {
     int n = nums.size();
     vector<int> cpro(n, 0), clro(n, 0), ans(n, 0);

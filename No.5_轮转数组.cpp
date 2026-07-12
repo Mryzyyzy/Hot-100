@@ -4,6 +4,14 @@
 
 using namespace std;
 
+/*
+    三步反转：
+        整体反转数组；
+        反转前 k  个元素；
+        反转剩下后面部分。
+边界：k % nums.size()：消除循环轮转多余次数，避免重复旋转。
+*/
+
 void rotate(vector<int> & nums, int &k){
     reverse(nums.begin(), nums.end());
     reverse(nums.begin(), nums.begin() + k % nums.size());
