@@ -19,3 +19,91 @@
  *    - c. 根据标记，将对应的行和列置零。
  *    - d. 最后，根据第 a 步的记录，处理第一行和第一列自己。
  */
+
+/*
+思路：先记录哪些行列需要置零，再统一修改矩阵，避免边遍历边改造成连锁影响。
+一共需要5步：1. 扫描第一列，检查是否有 0 
+            2. 扫描第一行，检查是否有 0
+            3. 使用第一行和第一列作为“标记位”，扫描剩下的 [1...m-1][1...n-1]
+            4. 根据第一行/列的标记位，执行置零
+            5. 最后单独处理第一行和第一列（因为它们被用来存标记了）
+关键数据结构：可以用 row/col 标记数组，进阶可用矩阵第一行第一列原地充当标记。
+注意：第一行和第一列本身是否有 0 要提前单独记录。
+*/
+
+#include "MatrixTestUtils.hpp"
+
+using namespace std;
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        bool fm = 0, fn = 0;
+        for(int i = 0; i < m; i++){
+            if(matrix[i][0] == 0) fm = 1;
+        }
+        for(int i = 0; i < n; i++){
+            if(matrix[0][i] == 0) fn = 1;
+        }
+
+        for(int i = 1; i < m; i++){
+            for(int j = 1; j < n; j++){
+                if(matrix[i][j] == 0){
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+        for(int i = 1; i < m; i++){
+            for(int j = 1; j < n; j++){
+                if(matrix[i][0] == 0 || matrix[0][j] == 0){
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        if(fm == 1){
+            for(int i = 0; i< m; i++){
+                matrix[i][0] = 0;
+            }
+        }
+        if(fn == 1){
+            for(int i = 0; i< n; i++){
+                matrix[0][i] = 0;
+            }
+        }
+    }
+};
+
+int main() {
+    Solution solution;
+
+    vector<vector<int>> matrix1 = {
+        {1, 1, 1},
+        {1, 0, 1},
+        {1, 1, 1}
+    };
+    solution.setZeroes(matrix1);
+    cout << "case 1 output   = " << matrixToString(matrix1) << "\n";
+    cout << "case 1 expected = [[1, 0, 1], [0, 0, 0], [1, 0, 1]]\n\n";
+
+    vector<vector<int>> matrix2 = {
+        {0, 1, 2, 0},
+        {3, 4, 5, 2},
+        {1, 3, 1, 5}
+    };
+    solution.setZeroes(matrix2);
+    cout << "case 2 output   = " << matrixToString(matrix2) << "\n";
+    cout << "case 2 expected = [[0, 0, 0, 0], [0, 4, 5, 0], [0, 3, 1, 0]]\n\n";
+
+    vector<vector<int>> matrix3 = {
+        {1},
+        {0}
+    };
+    solution.setZeroes(matrix3);
+    cout << "case 3 output   = " << matrixToString(matrix3) << "\n";
+    cout << "case 3 expected = [[0], [0]]\n";
+
+    return 0;
+}

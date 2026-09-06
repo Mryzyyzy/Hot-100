@@ -1,33 +1,86 @@
 /*
-给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
-图示两个链表在节点 c1 开始相交：
-题目数据 保证 整个链式结构中不存在环。
-注意，函数返回结果后，链表必须 保持其原始结构 。
+给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。
+如果两个链表不存在相交节点，返回 null。
+
+题目数据保证整个链式结构中不存在环。
+注意，函数返回结果后，链表必须保持其原始结构。
 
 自定义评测：
-
-评测系统 的输入如下（你设计的程序 不适用 此输入）：
-
-intersectVal - 相交的起始节点的值。如果不存在相交节点，这一值为 0
-listA - 第一个链表
-listB - 第二个链表
-skipA - 在 listA 中（从头节点开始）跳到交叉节点的节点数
-skipB - 在 listB 中（从头节点开始）跳到交叉节点的节点数
-评测系统将根据这些输入创建链式数据结构，并将两个头节点 headA 和 headB 传递给你的程序。如果程序能够正确返回相交节点，那么你的解决方案将被 视作正确答案 。
+intersectVal - 相交的起始节点的值。如果不存在相交节点，这一值为 0。
+listA - 第一个链表。
+listB - 第二个链表。
+skipA - 在 listA 中从头节点开始跳到交叉节点的节点数。
+skipB - 在 listB 中从头节点开始跳到交叉节点的节点数。
 
 示例 1：
 输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
 输出：Intersected at '8'
-解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。
-从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,6,1,8,4,5]。
-在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。
-— 请注意相交节点的值不为 1，因为在链表 A 和链表 B 之中值为 1 的节点 (A 中第二个节点和 B 中第三个节点) 是不同的节点。换句话说，它们在内存中指向两个不同的位置，而链表 A 和链表 B 中值为 8 的节点 (A 中第三个节点，B 中第四个节点) 在内存中指向相同的位置。
- 
 
 示例 2：
 输入：intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1
 输出：Intersected at '2'
-解释：相交节点的值为 2 （注意，如果两个链表相交则不能为 0）。
-从各自的表头开始算起，链表 A 为 [1,9,1,2,4]，链表 B 为 [3,2,4]。
-在 A 中，相交节点前有 3 个节点；在 B 中，相交节点前有 1 个节点。
+
+示例 3：
+输入：intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2
+输出：No intersection
 */
+
+/*
+思路：双指针分别从 A、B 出发，走到末尾后切换到另一条链表，最终会在相交点或 nullptr 相遇。
+关键数据结构：pA、pB 两个指针，用 A+B 和 B+A 的等长路径抵消长度差。
+注意：判断相交看节点地址是否相同，不是看节点值是否相等。
+*/
+
+#include "LinkedListTestUtils.hpp"
+
+class Solution {
+public:
+    ListNode* getIntersectionNode(ListNode* headA, ListNode* headB) {
+        ListNode *A = headA, *B = headB;
+        // 如果没有相交的话，ab会同时为空
+        while(A != B){
+            A = !A? headB : A->next;
+            B = !B? headA : B->next;
+        }
+        return A;
+    }
+};
+
+void attachSharedTail(ListNode*& head, ListNode* shared) {
+    if (head == nullptr) {
+        head = shared;
+        return;
+    }
+    tailOf(head)->next = shared;
+}
+
+int main() {
+    Solution solution;
+
+    ListNode* shared1 = buildList({8, 4, 5});
+    ListNode* headA1 = buildList({4, 1});
+    ListNode* headB1 = buildList({5, 6, 1});
+    attachSharedTail(headA1, shared1);
+    attachSharedTail(headB1, shared1);
+    ListNode* ans1 = solution.getIntersectionNode(headA1, headB1);
+    std::cout << "case 1 output   = " << (ans1 == nullptr ? -1 : ans1->val) << "\n";
+    std::cout << "case 1 expected = 8\n\n";
+
+    ListNode* shared2 = buildList({2, 4});
+    ListNode* headA2 = buildList({1, 9, 1});
+    ListNode* headB2 = buildList({3});
+    attachSharedTail(headA2, shared2);
+    attachSharedTail(headB2, shared2);
+    ListNode* ans2 = solution.getIntersectionNode(headA2, headB2);
+    std::cout << "case 2 output   = " << (ans2 == nullptr ? -1 : ans2->val) << "\n";
+    std::cout << "case 2 expected = 2\n\n";
+
+    ListNode* headA3 = buildList({2, 6, 4});
+    ListNode* headB3 = buildList({1, 5});
+    ListNode* ans3 = solution.getIntersectionNode(headA3, headB3);
+    std::cout << "case 3 output   = " << (ans3 == nullptr ? -1 : ans3->val) << "\n";
+    std::cout << "case 3 expected = -1\n";
+
+    freeReachableLists({headA1, headB1, headA2, headB2, headA3, headB3});
+    return 0;
+}
