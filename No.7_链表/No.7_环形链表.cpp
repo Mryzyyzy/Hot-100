@@ -24,6 +24,7 @@ pos 不作为参数进行传递，仅用于标识链表的实际情况。
 思路：快慢指针同时走，slow 每次一步，fast 每次两步；有环时两者一定会相遇。
 关键数据结构：slow 和 fast 两个 ListNode 指针，用来判断链表是否存在追及。
 注意：循环条件要保证 fast 和 fast->next 非空，避免访问空指针。
+    环形链表的两个题目用：while(fast && fast->next)
 */
 
 #include "LinkedListTestUtils.hpp"

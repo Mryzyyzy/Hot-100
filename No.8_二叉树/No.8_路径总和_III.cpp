@@ -22,6 +22,7 @@ using namespace std;
 思路：枚举每个节点作为路径起点，再向下递归累加路径和，遇到 targetSum 就计数。
 关键数据结构：queue 枚举所有起点，递归调用栈沿着每个起点向下累加路径和。
 注意：路径只能向下走；sum 用 long long，避免节点值累加溢出。
+     因为 sum 使用的是值传递，因此不用回溯
 */
 
 int df(TreeNode *node, long long sum, int targetSum){

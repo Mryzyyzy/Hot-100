@@ -20,6 +20,10 @@ void put(int key, int value) 如果关键字 key 已经存在，则变更其数�
 
 /*
 思路：get/put 都把访问过的节点移动到链表头部，容量超限时删除链表尾部最久未使用节点。
+    三个重要的数据结构：
+        void addhead(Node *node)
+        void movehead(Node *node)
+        int removetail()
 关键数据结构：unordered_map 负责 O(1) 找节点，双向链表负责 O(1) 调整新旧顺序。
 注意：淘汰时要从 map 中删除被移除节点的 key，不是删除刚插入的 key。
 */

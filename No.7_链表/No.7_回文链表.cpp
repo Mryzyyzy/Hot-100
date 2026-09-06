@@ -15,6 +15,9 @@
 思路：快慢指针找中点，反转后半段，再从两端向中间逐个比较。
 关键数据结构：slow/fast 定位中点，prev/cur 用来反转后半段链表。
 注意：奇偶长度都要处理好；如果要求保持原链表，比较后应把后半段再反转回来。
+    找中点的判断：
+        while(fast->next && fast->next->next)
+    此时右半边就是slow->next;(奇数不包括中间点)
 */
 
 #include "LinkedListTestUtils.hpp"

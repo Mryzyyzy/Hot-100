@@ -22,6 +22,7 @@ using namespace std;
 思路：DFS 回溯分别记录 root 到 p、q 的路径，再比较两条路径，最后一个相同节点就是最近公共祖先。
 关键数据结构：vector 保存根到目标节点的路径，用来按下标逐个比较公共前缀。
 注意：path/path_p/path_q 要引用传递；答案指针最好初始化为 nullptr。
+     处理完一个左右节点之后，说明这个子节点已经结束了，要记得回溯一下。
 */
 
 void df(TreeNode *root, TreeNode* p, TreeNode* q, vector<TreeNode*> &path, vector<TreeNode*> &path_p, vector<TreeNode*> &path_q){
