@@ -17,7 +17,11 @@ using namespace std;
 /*
 思路：队列里成对保存需要镜像比较的节点，每次比较 left 和 right 是否同时为空、值是否相等。
 关键数据结构：queue<pair<TreeNode*, TreeNode*>> 按层保存镜像节点对，用来同步比较左右两边。
-注意：弹出队头后再判断；下一层要交叉入队：left->left 对 right->right，left->right 对 right->left。
+注意：弹出队头后再判断：
+        1、左右同时为空 continue；
+        2、左右有一个为空 false；
+        3、左右的值如果不相等 false；
+    下一层要交叉入队：left->left 对 right->right，left->right 对 right->left。
 */
 
 class Solution {

@@ -22,6 +22,7 @@ using namespace std;
 思路：后序递归求每个节点的左右深度，left + right 就是经过当前节点的最长路径边数。
 关键数据结构：递归调用栈返回子树深度，maxheight 用来保存所有节点里最大的直径。
 注意：递归返回深度给父节点，全局 maxheight 记录答案；直径按边数算，所以不用再 +1。
+     记得对maxheight进行 “解指” 操作之后再进行运算。
 */
 
 int df(TreeNode* root, int *maxheight){
